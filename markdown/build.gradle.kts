@@ -25,10 +25,11 @@ kotlin {
         nodejs()
     }
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
+                api(compose.foundation)
                 api(compose.ui)
-                api(libs.kotlinx.coroutines.core)
+                api(libs.markdown)
             }
         }
     }
