@@ -98,12 +98,6 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownElementTypes.BLOCK_QUOTE -> {
             parseBlockQuote(node, content, configs, inlineTextContent)
         }
-        GFMTokenTypes.CHECK_BOX -> {
-            parseCheckbox(node, content, configs, inlineTextContent)
-        }
-        GFMElementTypes.TABLE -> {
-            parseTable(node, content, configs, inlineTextContent)
-        }
         MarkdownTokenTypes.TEXT -> {
             append(node.getTextInNode(content))
         }
@@ -124,10 +118,17 @@ fun AnnotatedString.Builder.parseMarkdown(
                 MarkdownElementTypes.ORDERED_LIST -> append('\n')
                 MarkdownElementTypes.UNORDERED_LIST -> append('\n')
                 MarkdownElementTypes.BLOCK_QUOTE -> append('\n')
+                GFMElementTypes.TABLE -> append('\n')
                 else -> {
                     Napier.d { "??? EOL ${parentType?.name}" }
                 }
             }
+        }
+        GFMTokenTypes.TABLE_SEPARATOR -> {
+            append(node.getTextInNode(content))
+        }
+        GFMElementTypes.ROW -> {
+            append(node.getTextInNode(content))
         }
         MarkdownTokenTypes.ATX_HEADER -> Unit // #
         MarkdownTokenTypes.SINGLE_QUOTE -> append('\'')
@@ -146,6 +147,12 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.WHITE_SPACE -> append(' ')
         MarkdownTokenTypes.EMPH -> Unit // *
         GFMTokenTypes.TILDE -> Unit // ~
+        GFMTokenTypes.CHECK_BOX -> {
+            parseCheckbox(node, content, configs, inlineTextContent)
+        }
+        GFMElementTypes.TABLE -> {
+            parseTable(node, content, configs, inlineTextContent)
+        }
         else -> {
             Napier.d { "??? ${node.type.name} ${node.getTextInNode(content)}" }
             append(node.getTextInNode(content))
