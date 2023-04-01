@@ -21,7 +21,9 @@ dependencyResolutionManagement {
 rootProject.name = "compose-markdown"
 
 include(
-    ":markdown",
+    ":markdown:core",
+    ":markdown:md2",
+    ":markdown:md3",
     ":app:common",
     ":app:android",
     ":app:desktop",

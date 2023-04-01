@@ -27,16 +27,15 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(compose.foundation)
-                api(compose.ui)
-                api(libs.markdown)
+                api(compose.material)
+                api(projects.markdown.core)
             }
         }
     }
 }
 
 android {
-    namespace = "io.github.qdsfdhvh.markdown"
+    namespace = "io.github.qdsfdhvh.markdown.m2"
     compileSdk = Versions.Android.compile
     defaultConfig {
         minSdk = Versions.Android.min

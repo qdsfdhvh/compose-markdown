@@ -3,9 +3,16 @@ package com.seiko.markdown.demo
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,11 +30,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import com.seiko.markdown.rememberMaterial3MarkdownTextContent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Material3Content(
+    content: String,
+    scope: CoroutineScope,
+) {
+    val scrollState = rememberScrollState()
+    val (annotatedString, inlineContent) = rememberMaterial3MarkdownTextContent(content)
+    val snackBarHostState = remember { SnackbarHostState() }
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) },
+    ) {
+        UrlText(
+            annotatedString,
+            inlineContent = inlineContent,
+            onUrlClicked = { url ->
+                scope.launch {
+                    snackBarHostState.showSnackbar(url)
+                }
+            },
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .fillMaxSize(),
+        )
+    }
+}
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
-fun UrlText(
+private fun UrlText(
     text: AnnotatedString,
     onUrlClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
