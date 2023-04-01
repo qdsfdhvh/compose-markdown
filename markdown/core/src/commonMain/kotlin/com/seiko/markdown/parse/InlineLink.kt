@@ -12,6 +12,7 @@ import androidx.compose.ui.text.withStyle
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.ast.ASTNode
+import org.intellij.markdown.ast.findChildOfType
 import org.intellij.markdown.ast.getTextInNode
 
 @OptIn(ExperimentalTextApi::class)
@@ -21,13 +22,10 @@ fun AnnotatedString.Builder.parseInlineLink(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    val linkDestination = node.children
-        .firstOrNull { it.type == MarkdownElementTypes.LINK_DESTINATION }
-        ?.getTextInNode(content)
-        ?.toString() ?: return
-    val linkTextNode = node.children
-        .firstOrNull { it.type == MarkdownElementTypes.LINK_TEXT } ?: return
-    withAnnotation(UrlAnnotation(linkDestination)) {
+    val linkDestination = node.findChildOfType(MarkdownElementTypes.LINK_DESTINATION) ?: return
+    val linkTextNode = node.findChildOfType(MarkdownElementTypes.LINK_TEXT) ?: return
+    val linkDestinationString = linkDestination.getTextInNode(content).toString()
+    withAnnotation(UrlAnnotation(linkDestinationString)) {
         withStyle(
             SpanStyle(
                 color = Color.Blue,

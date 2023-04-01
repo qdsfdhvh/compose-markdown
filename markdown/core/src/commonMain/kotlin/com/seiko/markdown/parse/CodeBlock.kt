@@ -3,7 +3,6 @@ package com.seiko.markdown.parse
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
@@ -13,10 +12,8 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
-
 
 fun AnnotatedString.Builder.parseCodeBlock(
     node: ASTNode,
@@ -33,7 +30,7 @@ fun AnnotatedString.Builder.parseCodeBlock(
     inlineTextContent[codeBlockKey] = InlineTextContent(
         placeholder = Placeholder(
             width = 100.em,
-            height = 120.sp, // TODO auto height
+            height = configs.calcTextHeight(codeBlockContent),
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {

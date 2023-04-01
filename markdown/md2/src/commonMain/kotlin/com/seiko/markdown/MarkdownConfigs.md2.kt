@@ -16,7 +16,7 @@ fun MaterialMarkdownTypography(typography: Typography) = MarkdownTypography(
     h6 = typography.subtitle2,
     text = typography.body1,
     code = typography.body1.copy(
-        background = Color.LightGray.copy(alpha = 0.5f)
+        background = Color.LightGray.copy(alpha = 0.5f),
     ),
 )
 

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
@@ -17,7 +17,6 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
 
@@ -36,7 +35,7 @@ fun AnnotatedString.Builder.parseBlockQuote(
     inlineTextContent[blockQuoteKey] = InlineTextContent(
         placeholder = Placeholder(
             width = 100.em,
-            height = 70.sp, // auto height
+            height = configs.calcTextHeight(blockQuoteContent),
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
@@ -45,7 +44,7 @@ fun AnnotatedString.Builder.parseBlockQuote(
                 modifier = Modifier.fillMaxHeight()
                     .padding(start = 4.dp, end = 4.dp)
                     .width(3.dp)
-                    .background(Color.LightGray, RoundedCornerShape(50)),
+                    .background(Color.LightGray, CircleShape),
             )
             configs.widget.Text(
                 text = blockQuoteContent,
