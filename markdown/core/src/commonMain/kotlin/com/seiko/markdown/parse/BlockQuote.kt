@@ -1,8 +1,8 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,6 +16,7 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
@@ -34,13 +35,13 @@ fun AnnotatedString.Builder.parseBlockQuote(
     }
     inlineTextContent[blockQuoteKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 400.sp,
-            height = 40.sp,
+            width = 100.em,
+            height = 70.sp, // auto height
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
         Row(modifier = Modifier.fillMaxHeight()) {
-            Box(
+            Spacer(
                 modifier = Modifier.fillMaxHeight()
                     .padding(start = 4.dp, end = 4.dp)
                     .width(3.dp)

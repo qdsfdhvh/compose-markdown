@@ -12,14 +12,8 @@ data class MarkdownConfigs(
     val typography: MarkdownTypography,
     val widget: MarkdownWidget,
     val density: Density,
-    val maxWidth: Dp = 800.dp,
-    val dividerWidth: Dp = maxWidth,
     val dividerHeight: Dp = 1.dp,
 ) {
-    val maxWidthSp: TextUnit
-        get() = with(density) { maxWidth.toSp() }
-    val dividerWidthSp: TextUnit
-        get() = with(density) { dividerWidth.toSp() }
     val dividerHeightSp: TextUnit
         get() = with(density) { dividerHeight.toSp() }
 }

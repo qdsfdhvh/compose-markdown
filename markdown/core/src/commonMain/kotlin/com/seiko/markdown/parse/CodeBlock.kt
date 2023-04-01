@@ -12,6 +12,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
@@ -31,7 +32,7 @@ fun AnnotatedString.Builder.parseCodeBlock(
     }
     inlineTextContent[codeBlockKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = configs.maxWidthSp,
+            width = 100.em,
             height = 120.sp, // TODO auto height
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),

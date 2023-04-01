@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.unit.em
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
@@ -19,7 +20,7 @@ fun AnnotatedString.Builder.parseDivider(
     val nodeText = node.getTextInNode(content).toString()
     inlineTextContent[dividerKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = configs.dividerWidthSp,
+            width = 100.em,
             height = configs.dividerHeightSp,
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
