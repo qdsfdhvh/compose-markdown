@@ -24,7 +24,7 @@ fun AnnotatedString.Builder.parseMarkdown(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    Napier.d { "${node.type.name} ${node.getTextInNode(content)}" }
+    // Napier.d { "${node.type.name} ${node.getTextInNode(content)}" }
     when (node.type) {
         MarkdownElementTypes.MARKDOWN_FILE,
         MarkdownElementTypes.PARAGRAPH,
@@ -110,13 +110,26 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.CODE_FENCE_START -> Unit
         MarkdownTokenTypes.CODE_FENCE_CONTENT -> {
             append(node.getTextInNode(content))
-            // append('\n')
         }
         MarkdownTokenTypes.CODE_FENCE_END -> Unit
         MarkdownTokenTypes.HORIZONTAL_RULE -> {
             parseDivider(node, content, configs, inlineTextContent)
         }
-        MarkdownTokenTypes.ATX_HEADER -> Unit
+        MarkdownTokenTypes.EOL -> {
+            when (val parentType = node.parent?.type) {
+                MarkdownElementTypes.MARKDOWN_FILE -> Unit
+                MarkdownElementTypes.PARAGRAPH -> append('\n')
+                MarkdownElementTypes.CODE_FENCE -> append('\n')
+                MarkdownElementTypes.CODE_BLOCK -> Unit
+                MarkdownElementTypes.ORDERED_LIST -> append('\n')
+                MarkdownElementTypes.UNORDERED_LIST -> append('\n')
+                MarkdownElementTypes.BLOCK_QUOTE -> append('\n')
+                else -> {
+                    Napier.d { "??? EOL ${parentType?.name}" }
+                }
+            }
+        }
+        MarkdownTokenTypes.ATX_HEADER -> Unit // #
         MarkdownTokenTypes.SINGLE_QUOTE -> append('\'')
         MarkdownTokenTypes.DOUBLE_QUOTE -> append('\"')
         MarkdownTokenTypes.LPAREN -> append('(')
@@ -130,7 +143,6 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.EXCLAMATION_MARK -> Unit // !
         MarkdownTokenTypes.BACKTICK -> Unit // `
         MarkdownTokenTypes.HARD_LINE_BREAK -> append('\n')
-        MarkdownTokenTypes.EOL -> append('\n')
         MarkdownTokenTypes.WHITE_SPACE -> append(' ')
         MarkdownTokenTypes.EMPH -> Unit // *
         GFMTokenTypes.TILDE -> Unit // ~
@@ -140,6 +152,3 @@ fun AnnotatedString.Builder.parseMarkdown(
         }
     }
 }
-
-
-

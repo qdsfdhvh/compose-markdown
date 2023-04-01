@@ -23,7 +23,8 @@ fun AnnotatedString.Builder.parseCodeBlock(
 ) {
     val codeBlockKey = node.toString()
     val codeBlockContent = buildAnnotatedString {
-        node.children.forEach { child ->
+        // drop CODE_FENCE_START EOL
+        node.children.asSequence().drop(2).forEach { child ->
             parseMarkdown(child, content, configs, inlineTextContent)
         }
     }
