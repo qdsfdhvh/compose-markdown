@@ -1,15 +1,10 @@
 package com.seiko.markdown.parse
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.MarkdownConfigs
 import org.intellij.markdown.ast.ASTNode
@@ -26,20 +21,18 @@ fun AnnotatedString.Builder.parseCheckbox(
     val nodeText = node.getTextInNode(content).toString()
     inlineTextContent[checkboxKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 32.sp,
+            width = 24.sp,
             height = 24.sp,
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
-        Row {
-            configs.widget.Checkbox(
-                checked = node.isChecked(nodeText),
-                onCheckedChange = {},
-            )
-            Spacer(modifier = Modifier.width(2.dp))
-        }
+        configs.widget.Checkbox(
+            checked = node.isChecked(nodeText),
+            onCheckedChange = {},
+        )
     }
     appendInlineContent(checkboxKey, nodeText)
+    append(' ')
 }
 
 private fun ASTNode.isChecked(nodeText: String): Boolean =
