@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -30,19 +31,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import com.seiko.markdown.rememberMaterial3MarkdownTextContent
+import com.seiko.markdown.config.ImageMarkdownWidgetPlugin
+import com.seiko.markdown.config.Material3MarkdownWidgetPlugin
+import com.seiko.markdown.config.markdownTypography
+import com.seiko.markdown.rememberMarkdownConfigs
+import com.seiko.markdown.rememberMarkdownTextContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTextApi::class)
 @Composable
 fun Material3Content(
     content: String,
     scope: CoroutineScope,
 ) {
     val scrollState = rememberScrollState()
-    val (annotatedString, inlineContent) = rememberMaterial3MarkdownTextContent(content)
+    val configs = rememberMarkdownConfigs(
+        typography = MaterialTheme.markdownTypography,
+    ) {
+        plugin(Material3MarkdownWidgetPlugin)
+        plugin(ImageMarkdownWidgetPlugin)
+    }
+    val (annotatedString, inlineContent) = rememberMarkdownTextContent(content, configs)
     val snackBarHostState = remember { SnackbarHostState() }
     Scaffold(
         snackbarHost = { SnackbarHost(snackBarHostState) },

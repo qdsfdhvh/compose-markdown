@@ -2,25 +2,24 @@ package com.seiko.markdown.config
 
 import androidx.compose.runtime.Composable
 
-object Material3MarkdownWidgetPlugin : MarkdownWidgetPlugin {
+object MaterialMarkdownWidgetPlugin : MarkdownWidgetPlugin {
 
     @Composable
     override fun Content(enum: MarkdownWidget): Boolean {
         return when (enum) {
             is MarkdownWidget.Text -> {
-                androidx.compose.material3.Text(enum.text)
+                androidx.compose.material.Text(enum.text)
                 true
             }
             is MarkdownWidget.Checkbox -> {
-                androidx.compose.material3.Checkbox(enum.checked, {})
+                androidx.compose.material.Checkbox(enum.checked, {})
                 true
             }
             MarkdownWidget.Divider -> {
-                androidx.compose.material3.Divider()
+                androidx.compose.material.Divider()
                 true
             }
             else -> false
         }
     }
-
 }

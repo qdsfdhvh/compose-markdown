@@ -22,6 +22,7 @@ rootProject.name = "compose-markdown"
 
 include(
     ":markdown:core",
+    ":markdown:widget-image",
     ":markdown:widget-md2",
     ":markdown:widget-md3",
     ":app:common",

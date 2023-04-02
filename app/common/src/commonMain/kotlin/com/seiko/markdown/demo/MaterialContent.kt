@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
@@ -28,18 +29,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import com.seiko.markdown.rememberMaterialMarkdownTextContent
+import com.seiko.markdown.config.ImageMarkdownWidgetPlugin
+import com.seiko.markdown.config.MaterialMarkdownWidgetPlugin
+import com.seiko.markdown.config.markdownTypography
+import com.seiko.markdown.rememberMarkdownConfigs
+import com.seiko.markdown.rememberMarkdownTextContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalTextApi::class)
 @Composable
 fun MaterialContent(
     content: String,
     scope: CoroutineScope,
 ) {
     val scrollState = rememberScrollState()
-    val (annotatedString, inlineContent) = rememberMaterialMarkdownTextContent(content)
+    val configs = rememberMarkdownConfigs(
+        typography = MaterialTheme.markdownTypography,
+    ) {
+        plugin(MaterialMarkdownWidgetPlugin)
+        plugin(ImageMarkdownWidgetPlugin)
+    }
+    val (annotatedString, inlineContent) = rememberMarkdownTextContent(content, configs)
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState) {
         UrlText(

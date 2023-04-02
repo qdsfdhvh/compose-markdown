@@ -27,7 +27,7 @@ fun AnnotatedString.Builder.parseDivider(
         ),
     ) {
         configs.Content(
-            MarkdownWidget.Divider
+            MarkdownWidget.Divider,
         )
     }
     appendInlineContent(dividerKey, nodeText)

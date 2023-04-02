@@ -34,7 +34,7 @@ fun AnnotatedString.Builder.parseTable(
         ),
     ) {
         configs.Content(
-            MarkdownWidget.Text(text = tableContent)
+            MarkdownWidget.Text(text = tableContent),
         )
     }
     appendInlineContent(tableContentKey, tableContent.text)

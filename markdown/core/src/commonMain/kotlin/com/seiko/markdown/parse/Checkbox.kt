@@ -28,7 +28,7 @@ fun AnnotatedString.Builder.parseCheckbox(
         ),
     ) {
         configs.Content(
-            MarkdownWidget.Checkbox(checked = node.isChecked(nodeText))
+            MarkdownWidget.Checkbox(checked = node.isChecked(nodeText)),
         )
     }
     appendInlineContent(checkboxKey, nodeText)

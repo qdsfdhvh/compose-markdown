@@ -1,12 +1,17 @@
+import com.vanniktech.maven.publish.KotlinMultiplatform
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    id("com.vanniktech.maven.publish.base")
 }
 
 kotlin {
-    android()
-    jvm {
+    android {
+        publishLibraryVariants("debug", "release")
+    }
+    jvm("desktop") {
         compilations.all {
             kotlinOptions.jvmTarget = Versions.Java.jvmTarget
         }
@@ -17,24 +22,21 @@ kotlin {
     macosArm64()
     js(IR) {
         browser()
-        binaries.executable()
+        nodejs()
     }
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.ui)
-                api(projects.markdown.widgetImage)
-                api(projects.markdown.widgetMd2)
-                api(projects.markdown.widgetMd3)
+                // api(compose.material)
+                api(projects.markdown.core)
+                api(libs.imageloader)
             }
         }
     }
 }
 
 android {
-    namespace = "io.github.qdsfdhvh.markdown.demo.common"
+    namespace = "io.github.qdsfdhvh.markdown.widget.image"
     compileSdk = Versions.Android.compile
     defaultConfig {
         minSdk = Versions.Android.min
@@ -43,4 +45,9 @@ android {
         sourceCompatibility = Versions.Java.source
         targetCompatibility = Versions.Java.target
     }
+}
+
+mavenPublishing {
+    @Suppress("UnstableApiUsage")
+    configure(KotlinMultiplatform())
 }

@@ -6,15 +6,15 @@ import androidx.compose.ui.text.AnnotatedString
 sealed interface MarkdownWidget {
     data class Text(
         val text: AnnotatedString,
-    ): MarkdownWidget
+    ) : MarkdownWidget
 
     data class Image(
         val url: String,
-    ): MarkdownWidget
+    ) : MarkdownWidget
 
     data class Checkbox(
         val checked: Boolean,
-    ): MarkdownWidget
+    ) : MarkdownWidget
 
     object Divider : MarkdownWidget
 }

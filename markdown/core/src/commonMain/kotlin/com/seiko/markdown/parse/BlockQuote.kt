@@ -51,7 +51,7 @@ fun AnnotatedString.Builder.parseBlockQuote(
                     .background(Color.LightGray, CircleShape),
             )
             configs.Content(
-                MarkdownWidget.Text(text = blockQuoteContent)
+                MarkdownWidget.Text(text = blockQuoteContent),
             )
         }
     }

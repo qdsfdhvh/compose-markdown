@@ -15,7 +15,7 @@ class MarkdownConfigs internal constructor(
     private val textMeasurer: TextMeasurer,
     private val widgetPlugin: MarkdownWidgetPlugin,
     val dividerHeight: Dp = 1.dp,
-): MarkdownWidgetPlugin by widgetPlugin {
+) : MarkdownWidgetPlugin by widgetPlugin {
     val dividerHeightSp: TextUnit
         get() = with(density) { dividerHeight.toSp() }
 
@@ -60,9 +60,9 @@ fun MarkdownConfigs(
     typography: MarkdownTypography,
     density: Density,
     textMeasurer: TextMeasurer,
-    block: MarkdownConfigsBuilder.() -> Unit
+    builder: MarkdownConfigsBuilder.() -> Unit
 ) = MarkdownConfigsBuilder(
     typography = typography,
     density = density,
     textMeasurer = textMeasurer,
-).apply(block).build()
+).apply(builder).build()

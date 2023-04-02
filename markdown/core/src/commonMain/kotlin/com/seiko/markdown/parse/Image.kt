@@ -32,7 +32,7 @@ fun AnnotatedString.Builder.parseImage(
             ),
         ) {
             configs.Content(
-                MarkdownWidget.Image(url = imageUrl)
+                MarkdownWidget.Image(url = imageUrl),
             )
         }
         appendInlineContent(imageUrl, imageUrl)

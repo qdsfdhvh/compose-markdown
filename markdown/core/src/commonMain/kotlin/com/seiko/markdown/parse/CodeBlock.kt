@@ -47,7 +47,7 @@ fun AnnotatedString.Builder.parseCodeBlock(
                 .fillMaxSize(),
         ) {
             configs.Content(
-                MarkdownWidget.Text(text = codeBlockContent)
+                MarkdownWidget.Text(text = codeBlockContent),
             )
         }
     }

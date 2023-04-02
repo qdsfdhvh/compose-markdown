@@ -35,7 +35,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.github.qdsfdhvh.markdown.m3"
+    namespace = "io.github.qdsfdhvh.markdown.widget.m3"
     compileSdk = Versions.Android.compile
     defaultConfig {
         minSdk = Versions.Android.min

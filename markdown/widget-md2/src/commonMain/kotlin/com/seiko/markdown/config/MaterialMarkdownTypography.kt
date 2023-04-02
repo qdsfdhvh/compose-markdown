@@ -1,7 +1,9 @@
 package com.seiko.markdown.config
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 
 @Suppress("FunctionName")
 fun MaterialMarkdownTypography(typography: Typography) = MarkdownTypography(
@@ -14,3 +16,8 @@ fun MaterialMarkdownTypography(typography: Typography) = MarkdownTypography(
     text = typography.body1,
     code = typography.body1,
 )
+
+val MaterialTheme.markdownTypography: MarkdownTypography
+    @Composable
+    @ReadOnlyComposable
+    get() = MaterialMarkdownTypography(typography)

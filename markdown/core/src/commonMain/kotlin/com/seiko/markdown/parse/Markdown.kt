@@ -148,7 +148,7 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.GT -> Unit // >
         MarkdownTokenTypes.COLON -> Unit // :
         MarkdownTokenTypes.BLOCK_QUOTE -> Unit // >
-        MarkdownTokenTypes.EXCLAMATION_MARK -> Unit // !
+        MarkdownTokenTypes.EXCLAMATION_MARK -> append('!') // !
         MarkdownTokenTypes.BACKTICK -> Unit // `
         MarkdownTokenTypes.HARD_LINE_BREAK -> append('\n')
         MarkdownTokenTypes.WHITE_SPACE -> append(' ')
