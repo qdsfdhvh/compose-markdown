@@ -130,13 +130,6 @@ fun AnnotatedString.Builder.parseMarkdown(
                 }
             }
         }
-        GFMTokenTypes.TABLE_SEPARATOR -> {
-            append(node.getTextInNode(content))
-        }
-        GFMElementTypes.HEADER,
-        GFMElementTypes.ROW -> {
-            append(node.getTextInNode(content))
-        }
         MarkdownTokenTypes.ATX_HEADER -> Unit // #
         MarkdownTokenTypes.SINGLE_QUOTE -> append('\'')
         MarkdownTokenTypes.DOUBLE_QUOTE -> append('\"')

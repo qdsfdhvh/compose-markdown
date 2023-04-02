@@ -17,6 +17,11 @@ sealed interface MarkdownWidget {
     ) : MarkdownWidget
 
     object Divider : MarkdownWidget
+
+    data class Table(
+        val headers: List<String>,
+        val rows: List<List<String>>,
+    ) : MarkdownWidget
 }
 
 interface MarkdownWidgetPlugin {

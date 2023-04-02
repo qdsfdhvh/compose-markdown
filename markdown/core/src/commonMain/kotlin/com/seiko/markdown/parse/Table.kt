@@ -5,12 +5,15 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
+import org.intellij.markdown.ast.getTextInNode
+import org.intellij.markdown.flavours.gfm.GFMElementTypes
+import org.intellij.markdown.flavours.gfm.GFMTokenTypes
+import org.intellij.markdown.flavours.gfm.GFMTokenTypes.CELL
 
 fun AnnotatedString.Builder.parseTable(
     node: ASTNode,
@@ -19,23 +22,41 @@ fun AnnotatedString.Builder.parseTable(
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     val tableContentKey = node.toString()
-    val tableContent = buildAnnotatedString {
-        node.children.forEach { child ->
-            withStyle(configs.typography.text.toSpanStyle()) {
-                parseMarkdown(child, content, configs, inlineTextContent)
+
+    val headers = mutableListOf<String>()
+    val rows = mutableListOf<List<String>>()
+    node.children.forEach { child ->
+        when (child.type) {
+            GFMElementTypes.HEADER -> {
+                headers.addAll(
+                    child.children.filter { it.type == CELL }
+                        .map { it.getTextInNode(content).toString() }
+                )
+            }
+            GFMTokenTypes.TABLE_SEPARATOR -> {
+            }
+            GFMElementTypes.ROW -> {
+                rows.add(
+                    child.children.filter { it.type == CELL }
+                        .map { it.getTextInNode(content).toString() }
+                )
             }
         }
     }
+
     inlineTextContent[tableContentKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 80.em,
-            height = configs.calcTextHeight(tableContent),
+            width = 100.em,
+            height = 160.sp, // TODO calc height
             placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
         ),
     ) {
         configs.Content(
-            MarkdownWidget.Text(text = tableContent),
+            MarkdownWidget.Table(
+                headers = headers,
+                rows = rows,
+            ),
         )
     }
-    appendInlineContent(tableContentKey, tableContent.text)
+    appendInlineContent(tableContentKey, "table")
 }
