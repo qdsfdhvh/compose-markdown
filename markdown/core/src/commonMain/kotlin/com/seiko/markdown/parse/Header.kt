@@ -3,8 +3,8 @@ package com.seiko.markdown.parse
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
-import com.seiko.markdown.MarkdownConfigs
-import com.seiko.markdown.MarkdownTypography
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownTypography
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.ast.ASTNode
 

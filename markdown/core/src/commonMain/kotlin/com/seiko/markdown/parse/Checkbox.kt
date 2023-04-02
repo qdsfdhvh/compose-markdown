@@ -6,7 +6,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.sp
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
@@ -26,9 +27,8 @@ fun AnnotatedString.Builder.parseCheckbox(
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
-        configs.widget.Checkbox(
-            checked = node.isChecked(nodeText),
-            onCheckedChange = {},
+        configs.Content(
+            MarkdownWidget.Checkbox(checked = node.isChecked(nodeText))
         )
     }
     appendInlineContent(checkboxKey, nodeText)

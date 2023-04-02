@@ -6,7 +6,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.sp
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
@@ -30,7 +31,9 @@ fun AnnotatedString.Builder.parseImage(
                 PlaceholderVerticalAlign.TextCenter,
             ),
         ) {
-            configs.widget.Image(url = imageUrl)
+            configs.Content(
+                MarkdownWidget.Image(url = imageUrl)
+            )
         }
         appendInlineContent(imageUrl, imageUrl)
     }

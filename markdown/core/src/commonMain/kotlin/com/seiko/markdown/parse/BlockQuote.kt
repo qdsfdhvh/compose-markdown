@@ -15,9 +15,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
 
 fun AnnotatedString.Builder.parseBlockQuote(
@@ -29,7 +31,9 @@ fun AnnotatedString.Builder.parseBlockQuote(
     val blockQuoteKey = node.toString()
     val blockQuoteContent = buildAnnotatedString {
         node.children.forEach { child ->
-            parseMarkdown(child, content, configs, inlineTextContent)
+            withStyle(configs.typography.text.toSpanStyle()) {
+                parseMarkdown(child, content, configs, inlineTextContent)
+            }
         }
     }
     inlineTextContent[blockQuoteKey] = InlineTextContent(
@@ -46,9 +50,8 @@ fun AnnotatedString.Builder.parseBlockQuote(
                     .width(3.dp)
                     .background(Color.LightGray, CircleShape),
             )
-            configs.widget.Text(
-                text = blockQuoteContent,
-                textStyle = configs.typography.text,
+            configs.Content(
+                MarkdownWidget.Text(text = blockQuoteContent)
             )
         }
     }

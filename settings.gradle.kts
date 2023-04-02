@@ -22,8 +22,8 @@ rootProject.name = "compose-markdown"
 
 include(
     ":markdown:core",
-    ":markdown:md2",
-    ":markdown:md3",
+    ":markdown:widget-md2",
+    ":markdown:widget-md3",
     ":app:common",
     ":app:android",
     ":app:desktop",

@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
 import io.github.aakira.napier.Napier
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.MarkdownTokenTypes
@@ -101,17 +101,23 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.TEXT -> {
             append(node.getTextInNode(content))
         }
-        MarkdownTokenTypes.CODE_FENCE_START -> Unit
+        MarkdownTokenTypes.CODE_FENCE_START -> {
+            pushStyle(configs.typography.code.toParagraphStyle())
+            pushStyle(configs.typography.code.toSpanStyle())
+        }
         MarkdownTokenTypes.CODE_FENCE_CONTENT -> {
             append(node.getTextInNode(content))
         }
-        MarkdownTokenTypes.CODE_FENCE_END -> Unit
+        MarkdownTokenTypes.CODE_FENCE_END -> {
+            pop()
+            pop()
+        }
         MarkdownTokenTypes.HORIZONTAL_RULE -> {
             parseDivider(node, content, configs, inlineTextContent)
         }
         MarkdownTokenTypes.EOL -> {
             when (val parentType = node.parent?.type) {
-                MarkdownElementTypes.MARKDOWN_FILE -> Unit
+                MarkdownElementTypes.MARKDOWN_FILE -> append('\n')
                 MarkdownElementTypes.PARAGRAPH -> append('\n')
                 MarkdownElementTypes.CODE_FENCE -> append('\n')
                 MarkdownElementTypes.CODE_BLOCK -> Unit
@@ -127,6 +133,7 @@ fun AnnotatedString.Builder.parseMarkdown(
         GFMTokenTypes.TABLE_SEPARATOR -> {
             append(node.getTextInNode(content))
         }
+        GFMElementTypes.HEADER,
         GFMElementTypes.ROW -> {
             append(node.getTextInNode(content))
         }

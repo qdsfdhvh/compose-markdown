@@ -12,7 +12,9 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.em
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownWidget
+import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 import org.intellij.markdown.ast.ASTNode
 
 fun AnnotatedString.Builder.parseCodeBlock(
@@ -23,8 +25,12 @@ fun AnnotatedString.Builder.parseCodeBlock(
 ) {
     val codeBlockKey = node.toString()
     val codeBlockContent = buildAnnotatedString {
-        // drop CODE_FENCE_START EOL
-        node.children.asSequence().drop(2).forEach { child ->
+        var dropFirstEOL = false
+        node.children.forEach { child ->
+            if (!dropFirstEOL && child.type === EOL) {
+                dropFirstEOL = true
+                return@forEach
+            }
             parseMarkdown(child, content, configs, inlineTextContent)
         }
     }
@@ -40,9 +46,8 @@ fun AnnotatedString.Builder.parseCodeBlock(
                 .background(color = Color.LightGray.copy(alpha = 0.5f))
                 .fillMaxSize(),
         ) {
-            configs.widget.Text(
-                text = codeBlockContent,
-                textStyle = configs.typography.text,
+            configs.Content(
+                MarkdownWidget.Text(text = codeBlockContent)
             )
         }
     }

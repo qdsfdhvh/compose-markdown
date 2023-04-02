@@ -25,8 +25,8 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.ui)
-                api(projects.markdown.md2)
-                api(projects.markdown.md3)
+                api(projects.markdown.widgetMd2)
+                api(projects.markdown.widgetMd3)
             }
         }
     }

@@ -6,10 +6,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.em
-import com.seiko.markdown.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
 
 fun AnnotatedString.Builder.parseTable(
     node: ASTNode,
@@ -20,7 +21,9 @@ fun AnnotatedString.Builder.parseTable(
     val tableContentKey = node.toString()
     val tableContent = buildAnnotatedString {
         node.children.forEach { child ->
-            parseMarkdown(child, content, configs, inlineTextContent)
+            withStyle(configs.typography.text.toSpanStyle()) {
+                parseMarkdown(child, content, configs, inlineTextContent)
+            }
         }
     }
     inlineTextContent[tableContentKey] = InlineTextContent(
@@ -30,10 +33,8 @@ fun AnnotatedString.Builder.parseTable(
             placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
         ),
     ) {
-        // TODO draw table here
-        configs.widget.Text(
-            text = AnnotatedString(node.getTextInNode(content).toString()),
-            textStyle = configs.typography.text,
+        configs.Content(
+            MarkdownWidget.Text(text = tableContent)
         )
     }
     appendInlineContent(tableContentKey, tableContent.text)
