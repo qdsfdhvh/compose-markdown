@@ -1,21 +1,22 @@
 package com.seiko.markdown.parse
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.drawText
 import com.seiko.markdown.config.MarkdownConfigs
-import com.seiko.markdown.config.MarkdownWidget
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 
+@OptIn(ExperimentalTextApi::class)
 internal fun AnnotatedString.Builder.parseCodeBlock(
     node: MarkdownNode,
     configs: MarkdownConfigs,
@@ -32,21 +33,19 @@ internal fun AnnotatedString.Builder.parseCodeBlock(
             parseMarkdown(child, configs, inlineTextContent)
         }
     }
+
+    val textLayoutResult = configs.textMeasurer.measure(codeBlockAnnotatedString)
+
     inlineTextContent[codeBlockKey] = InlineTextContent(
         placeholder = Placeholder(
             width = configs.maxWidthSP,
-            height = configs.calcTextHeight(codeBlockAnnotatedString),
+            height = with(configs.density) { textLayoutResult.size.height.toSp() },
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
-        Box(
-            modifier = Modifier
-                .background(color = Color.LightGray.copy(alpha = 0.5f))
-                .fillMaxSize(),
-        ) {
-            configs.Content(
-                MarkdownWidget.Text(text = codeBlockAnnotatedString),
-            )
+        Canvas(Modifier.fillMaxSize()) {
+            drawRect(Color.LightGray.copy(alpha = 0.5f))
+            drawText(textLayoutResult)
         }
     }
     appendInlineContent(codeBlockKey, node.text)
