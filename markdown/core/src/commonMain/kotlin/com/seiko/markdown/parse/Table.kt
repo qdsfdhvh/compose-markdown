@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import com.seiko.markdown.model.MarkdownNode
@@ -37,8 +38,7 @@ internal fun AnnotatedString.Builder.parseTable(
             }
         }
     }
-
-    val tableHeight = configs.typography.text.fontSize * (1 + rows.size)
+    val tableHeight = 40.sp * (1 + rows.size) // TODO calc row height
     inlineTextContent[tableContentKey] = InlineTextContent(
         placeholder = Placeholder(
             width = configs.maxWidthSP,
