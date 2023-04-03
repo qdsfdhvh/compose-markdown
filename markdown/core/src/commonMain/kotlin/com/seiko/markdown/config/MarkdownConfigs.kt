@@ -14,21 +14,30 @@ class MarkdownConfigs internal constructor(
     private val density: Density,
     private val textMeasurer: TextMeasurer,
     private val widgetPlugin: MarkdownWidgetPlugin,
+    private val maxWidth: Dp,
     val dividerHeight: Dp = 1.dp,
 ) : MarkdownWidgetPlugin by widgetPlugin {
+
+    val maxWidthSP: TextUnit
+        get() = maxWidth.toSp()
+
     val dividerHeightSp: TextUnit
-        get() = with(density) { dividerHeight.toSp() }
+        get() = dividerHeight.toSp()
 
     fun calcTextWidth(text: AnnotatedString): TextUnit {
-        return with(density) {
-            textMeasurer.measure(text).size.width.toSp()
-        }
+        return textMeasurer.measure(text).size.width.toSp()
     }
 
     fun calcTextHeight(text: AnnotatedString): TextUnit {
-        return with(density) {
-            textMeasurer.measure(text).size.height.toSp()
-        }
+        return textMeasurer.measure(text).size.height.toSp()
+    }
+
+    private fun Dp.toSp() = with(density) {
+        this@toSp.toSp()
+    }
+
+    private fun Int.toSp() = with(density) {
+        this@toSp.toSp()
     }
 }
 
@@ -39,6 +48,7 @@ class MarkdownConfigsBuilder internal constructor(
     private val textMeasurer: TextMeasurer,
 ) {
     var dividerHeight: Dp = 1.dp
+    var maxWidth: Dp = 800.dp
 
     private val widgetPluginProxy = MarkdownWidgetPluginProxy()
 
@@ -51,6 +61,7 @@ class MarkdownConfigsBuilder internal constructor(
         density = density,
         textMeasurer = textMeasurer,
         widgetPlugin = widgetPluginProxy,
+        maxWidth = maxWidth,
         dividerHeight = dividerHeight,
     )
 }

@@ -11,11 +11,11 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.em
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 import org.intellij.markdown.ast.ASTNode
+import org.intellij.markdown.ast.getTextInNode
 
 fun AnnotatedString.Builder.parseCodeBlock(
     node: ASTNode,
@@ -24,7 +24,7 @@ fun AnnotatedString.Builder.parseCodeBlock(
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     val codeBlockKey = node.toString()
-    val codeBlockContent = buildAnnotatedString {
+    val codeBlockAnnotatedString = buildAnnotatedString {
         var dropFirstEOL = false
         node.children.forEach { child ->
             if (!dropFirstEOL && child.type === EOL) {
@@ -36,8 +36,8 @@ fun AnnotatedString.Builder.parseCodeBlock(
     }
     inlineTextContent[codeBlockKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 100.em,
-            height = configs.calcTextHeight(codeBlockContent),
+            width = configs.maxWidthSP,
+            height = configs.calcTextHeight(codeBlockAnnotatedString),
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
@@ -47,9 +47,11 @@ fun AnnotatedString.Builder.parseCodeBlock(
                 .fillMaxSize(),
         ) {
             configs.Content(
-                MarkdownWidget.Text(text = codeBlockContent),
+                MarkdownWidget.Text(text = codeBlockAnnotatedString),
             )
         }
     }
-    appendInlineContent(codeBlockKey, codeBlockContent.text)
+
+    val codeBlockContent = node.getTextInNode(content).toString()
+    appendInlineContent(codeBlockKey, codeBlockContent)
 }

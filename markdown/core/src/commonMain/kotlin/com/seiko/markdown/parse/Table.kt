@@ -5,7 +5,6 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
@@ -44,10 +43,11 @@ fun AnnotatedString.Builder.parseTable(
         }
     }
 
+    val tableHeight = configs.typography.text.fontSize * (1 + rows.size)
     inlineTextContent[tableContentKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 100.em,
-            height = 160.sp, // TODO calc height
+            width = configs.maxWidthSP,
+            height = tableHeight,
             placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
         ),
     ) {
@@ -58,5 +58,7 @@ fun AnnotatedString.Builder.parseTable(
             ),
         )
     }
-    appendInlineContent(tableContentKey, "table")
+
+    val tableContent = node.getTextInNode(content).toString()
+    appendInlineContent(tableContentKey, tableContent)
 }

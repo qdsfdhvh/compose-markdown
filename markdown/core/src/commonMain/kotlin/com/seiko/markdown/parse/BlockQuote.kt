@@ -17,10 +17,10 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import org.intellij.markdown.ast.ASTNode
+import org.intellij.markdown.ast.getTextInNode
 
 fun AnnotatedString.Builder.parseBlockQuote(
     node: ASTNode,
@@ -29,7 +29,7 @@ fun AnnotatedString.Builder.parseBlockQuote(
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     val blockQuoteKey = node.toString()
-    val blockQuoteContent = buildAnnotatedString {
+    val blockQuoteAnnotatedString = buildAnnotatedString {
         node.children.forEach { child ->
             withStyle(configs.typography.text.toSpanStyle()) {
                 parseMarkdown(child, content, configs, inlineTextContent)
@@ -38,8 +38,8 @@ fun AnnotatedString.Builder.parseBlockQuote(
     }
     inlineTextContent[blockQuoteKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 100.em,
-            height = configs.calcTextHeight(blockQuoteContent),
+            width = configs.maxWidthSP,
+            height = configs.calcTextHeight(blockQuoteAnnotatedString),
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {
@@ -51,9 +51,11 @@ fun AnnotatedString.Builder.parseBlockQuote(
                     .background(Color.LightGray, CircleShape),
             )
             configs.Content(
-                MarkdownWidget.Text(text = blockQuoteContent),
+                MarkdownWidget.Text(text = blockQuoteAnnotatedString),
             )
         }
     }
-    appendInlineContent(blockQuoteKey, blockQuoteContent.text)
+
+    val blockQuoteContent = node.getTextInNode(content).toString()
+    appendInlineContent(blockQuoteKey, blockQuoteContent)
 }
