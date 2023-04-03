@@ -4,6 +4,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 
 @Suppress("FunctionName")
 fun MaterialMarkdownTypography(typography: Typography) = MarkdownTypography(
@@ -15,6 +18,10 @@ fun MaterialMarkdownTypography(typography: Typography) = MarkdownTypography(
     h6 = typography.subtitle2,
     text = typography.body1,
     code = typography.body1,
+    url = TextStyle(
+        color = Color.Blue,
+        textDecoration = TextDecoration.Underline,
+    ),
 )
 
 val MaterialTheme.markdownTypography: MarkdownTypography

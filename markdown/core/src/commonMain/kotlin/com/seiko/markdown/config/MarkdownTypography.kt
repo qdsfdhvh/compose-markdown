@@ -11,4 +11,5 @@ data class MarkdownTypography(
     val h6: TextStyle,
     val text: TextStyle,
     val code: TextStyle,
+    val url: TextStyle,
 )

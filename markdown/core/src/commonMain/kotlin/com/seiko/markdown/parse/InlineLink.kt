@@ -1,12 +1,9 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.UrlAnnotation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import com.seiko.markdown.config.MarkdownConfigs
@@ -19,19 +16,17 @@ internal fun AnnotatedString.Builder.parseInlineLink(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    val linkDestination = node.child(MarkdownElementTypes.LINK_DESTINATION) ?: return
-    val linkTextNode = node.child(MarkdownElementTypes.LINK_TEXT) ?: return
-    val linkDestinationString = linkDestination.text
-    withAnnotation(UrlAnnotation(linkDestinationString)) {
-        withStyle(
-            SpanStyle(
-                color = Color.Blue,
-                textDecoration = TextDecoration.Underline,
-            ),
-        ) {
-            linkTextNode.children.forEach { child ->
-                parseMarkdown(child, configs, inlineTextContent)
+    val label = node.child(MarkdownElementTypes.LINK_TEXT)
+    val destination = node.child(MarkdownElementTypes.LINK_DESTINATION)?.text
+    if (label != null && destination != null) {
+        withAnnotation(UrlAnnotation(destination)) {
+            withStyle(configs.typography.url.toSpanStyle()) {
+                label.children.forEach { child ->
+                    parseMarkdown(child, configs, inlineTextContent)
+                }
             }
         }
+    } else {
+        append(node.text)
     }
 }
