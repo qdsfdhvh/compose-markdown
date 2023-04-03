@@ -5,23 +5,22 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownTypography
+import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownElementTypes
-import org.intellij.markdown.ast.ASTNode
 
-fun AnnotatedString.Builder.parseHeader(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseHeader(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     withStyle(node.toTextStyle(configs.typography)) {
         node.children.forEach { child ->
-            parseMarkdown(child, content, configs, inlineTextContent)
+            parseMarkdown(child, configs, inlineTextContent)
         }
     }
 }
 
-private fun ASTNode.toTextStyle(typography: MarkdownTypography): TextStyle {
+private fun MarkdownNode.toTextStyle(typography: MarkdownTypography): TextStyle {
     return with(typography) {
         when (type) {
             MarkdownElementTypes.SETEXT_1,

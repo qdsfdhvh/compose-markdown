@@ -8,12 +8,10 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
+import com.seiko.markdown.model.MarkdownNode
 
-fun AnnotatedString.Builder.parseImage(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseImage(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
@@ -22,8 +20,7 @@ fun AnnotatedString.Builder.parseImage(
     if (imageUrlNode.children.size > 2) {
         val imageUrl = imageUrlNode.children
             .getOrNull(imageUrlNode.children.size - 2)
-            ?.getTextInNode(content)
-            ?.toString() ?: return
+            ?.text ?: return
         inlineTextContent[imageUrl] = InlineTextContent(
             placeholder = Placeholder(
                 width = 64.sp,

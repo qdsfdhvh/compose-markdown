@@ -10,17 +10,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.model.MarkdownNode
 import io.github.aakira.napier.Napier
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.MarkdownTokenTypes
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-fun AnnotatedString.Builder.parseMarkdown(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseMarkdown(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
@@ -33,7 +31,7 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownElementTypes.LIST_ITEM,
         MarkdownTokenTypes.ATX_CONTENT -> {
             node.children.forEach { child ->
-                parseMarkdown(child, content, configs, inlineTextContent)
+                parseMarkdown(child, configs, inlineTextContent)
             }
         }
         MarkdownElementTypes.SETEXT_1,
@@ -44,19 +42,19 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownElementTypes.ATX_4,
         MarkdownElementTypes.ATX_5,
         MarkdownElementTypes.ATX_6 -> {
-            parseHeader(node, content, configs, inlineTextContent)
+            parseHeader(node, configs, inlineTextContent)
         }
         MarkdownElementTypes.STRONG -> {
             withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                 node.children.forEach { child ->
-                    parseMarkdown(child, content, configs, inlineTextContent)
+                    parseMarkdown(child, configs, inlineTextContent)
                 }
             }
         }
         MarkdownElementTypes.EMPH -> {
             withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
                 node.children.forEach { child ->
-                    parseMarkdown(child, content, configs, inlineTextContent)
+                    parseMarkdown(child, configs, inlineTextContent)
                 }
             }
         }
@@ -68,24 +66,24 @@ fun AnnotatedString.Builder.parseMarkdown(
                 ),
             ) {
                 node.children.forEach { child ->
-                    parseMarkdown(child, content, configs, inlineTextContent)
+                    parseMarkdown(child, configs, inlineTextContent)
                 }
             }
         }
         MarkdownElementTypes.CODE_FENCE,
         MarkdownElementTypes.CODE_BLOCK -> {
-            parseCodeBlock(node, content, configs, inlineTextContent)
+            parseCodeBlock(node, configs, inlineTextContent)
         }
         MarkdownElementTypes.IMAGE -> {
-            parseImage(node, content, configs, inlineTextContent)
+            parseImage(node, configs, inlineTextContent)
         }
         MarkdownElementTypes.INLINE_LINK -> {
-            parseInlineLink(node, content, configs, inlineTextContent)
+            parseInlineLink(node, configs, inlineTextContent)
         }
         GFMElementTypes.STRIKETHROUGH -> {
             withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
                 node.children.forEach { child ->
-                    parseMarkdown(child, content, configs, inlineTextContent)
+                    parseMarkdown(child, configs, inlineTextContent)
                 }
             }
         }
@@ -93,27 +91,27 @@ fun AnnotatedString.Builder.parseMarkdown(
             parseListBullet(node)
         }
         MarkdownTokenTypes.LIST_NUMBER -> {
-            parseListNumber(node, content)
+            parseListNumber(node)
         }
         MarkdownElementTypes.BLOCK_QUOTE -> {
-            parseBlockQuote(node, content, configs, inlineTextContent)
+            parseBlockQuote(node, configs, inlineTextContent)
         }
         MarkdownTokenTypes.TEXT -> {
-            append(node.getTextInNode(content))
+            append(node.text)
         }
         MarkdownTokenTypes.CODE_FENCE_START -> {
             pushStyle(configs.typography.code.toParagraphStyle())
             pushStyle(configs.typography.code.toSpanStyle())
         }
         MarkdownTokenTypes.CODE_FENCE_CONTENT -> {
-            append(node.getTextInNode(content))
+            append(node.text)
         }
         MarkdownTokenTypes.CODE_FENCE_END -> {
             pop()
             pop()
         }
         MarkdownTokenTypes.HORIZONTAL_RULE -> {
-            parseDivider(node, content, configs, inlineTextContent)
+            parseDivider(node, configs, inlineTextContent)
         }
         MarkdownTokenTypes.EOL -> {
             when (val parentType = node.parent?.type) {
@@ -148,14 +146,14 @@ fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.EMPH -> Unit // *
         GFMTokenTypes.TILDE -> Unit // ~
         GFMTokenTypes.CHECK_BOX -> {
-            parseCheckbox(node, content, configs, inlineTextContent)
+            parseCheckbox(node, configs, inlineTextContent)
         }
         GFMElementTypes.TABLE -> {
-            parseTable(node, content, configs, inlineTextContent)
+            parseTable(node, configs, inlineTextContent)
         }
         else -> {
-            Napier.d { "??? ${node.type.name} ${node.getTextInNode(content)}" }
-            append(node.getTextInNode(content))
+            Napier.d { "??? ${node.type.name} ${node.text}" }
+            append(node.text)
         }
     }
 }

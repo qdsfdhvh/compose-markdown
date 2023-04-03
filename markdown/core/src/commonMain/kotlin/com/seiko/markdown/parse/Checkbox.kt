@@ -8,18 +8,16 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
+import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-fun AnnotatedString.Builder.parseCheckbox(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseCheckbox(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     val checkboxKey = node.toString()
-    val nodeText = node.getTextInNode(content).toString()
+    val nodeText = node.text
     inlineTextContent[checkboxKey] = InlineTextContent(
         placeholder = Placeholder(
             width = 24.sp,
@@ -35,5 +33,5 @@ fun AnnotatedString.Builder.parseCheckbox(
     append(' ')
 }
 
-private fun ASTNode.isChecked(nodeText: String): Boolean =
+private fun MarkdownNode.isChecked(nodeText: String): Boolean =
     type == GFMTokenTypes.CHECK_BOX && "[x]" in nodeText

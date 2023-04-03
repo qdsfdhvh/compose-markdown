@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.Density
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownConfigsBuilder
 import com.seiko.markdown.config.MarkdownTypography
+import com.seiko.markdown.model.MarkdownNode
 import com.seiko.markdown.parse.parseMarkdown
 import org.intellij.markdown.flavours.MarkdownFlavourDescriptor
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
@@ -60,10 +61,11 @@ fun parseMarkdownTextContent(
     flavour: MarkdownFlavourDescriptor = GFMFlavourDescriptor()
 ): MarkdownTextContent {
     val rootNode = MarkdownParser(flavour).buildMarkdownTreeFromString(content)
+    val rootMarkdownNode = MarkdownNode(rootNode, null, content)
 
     val inlineTextContent = mutableMapOf<String, InlineTextContent>()
     val annotatedString = buildAnnotatedString {
-        parseMarkdown(rootNode, content, configs, inlineTextContent)
+        parseMarkdown(rootMarkdownNode, configs, inlineTextContent)
     }
 
     return MarkdownTextContent(

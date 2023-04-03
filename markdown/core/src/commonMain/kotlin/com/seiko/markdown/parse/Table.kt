@@ -5,18 +5,15 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
+import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes.CELL
 
-fun AnnotatedString.Builder.parseTable(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseTable(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
@@ -28,16 +25,14 @@ fun AnnotatedString.Builder.parseTable(
         when (child.type) {
             GFMElementTypes.HEADER -> {
                 headers.addAll(
-                    child.children.filter { it.type == CELL }
-                        .map { it.getTextInNode(content).toString() }
+                    child.children.filter { it.type == CELL }.map { it.text },
                 )
             }
             GFMTokenTypes.TABLE_SEPARATOR -> {
             }
             GFMElementTypes.ROW -> {
                 rows.add(
-                    child.children.filter { it.type == CELL }
-                        .map { it.getTextInNode(content).toString() }
+                    child.children.filter { it.type == CELL }.map { it.text },
                 )
             }
         }
@@ -58,7 +53,5 @@ fun AnnotatedString.Builder.parseTable(
             ),
         )
     }
-
-    val tableContent = node.getTextInNode(content).toString()
-    appendInlineContent(tableContentKey, tableContent)
+    appendInlineContent(tableContentKey, node.text)
 }

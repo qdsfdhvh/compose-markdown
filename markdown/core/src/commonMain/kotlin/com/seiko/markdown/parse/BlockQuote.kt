@@ -19,12 +19,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
+import com.seiko.markdown.model.MarkdownNode
 
-fun AnnotatedString.Builder.parseBlockQuote(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseBlockQuote(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
@@ -32,7 +30,7 @@ fun AnnotatedString.Builder.parseBlockQuote(
     val blockQuoteAnnotatedString = buildAnnotatedString {
         node.children.forEach { child ->
             withStyle(configs.typography.text.toSpanStyle()) {
-                parseMarkdown(child, content, configs, inlineTextContent)
+                parseMarkdown(child, configs, inlineTextContent)
             }
         }
     }
@@ -55,7 +53,5 @@ fun AnnotatedString.Builder.parseBlockQuote(
             )
         }
     }
-
-    val blockQuoteContent = node.getTextInNode(content).toString()
-    appendInlineContent(blockQuoteKey, blockQuoteContent)
+    appendInlineContent(blockQuoteKey, node.text)
 }

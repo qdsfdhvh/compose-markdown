@@ -4,10 +4,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import org.intellij.markdown.ast.ASTNode
+import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-fun AnnotatedString.Builder.parseListBullet(node: ASTNode) {
+internal fun AnnotatedString.Builder.parseListBullet(node: MarkdownNode) {
     val isCheckboxItem = node.parent?.children
         ?.any { it.type == GFMTokenTypes.CHECK_BOX }
         ?: false

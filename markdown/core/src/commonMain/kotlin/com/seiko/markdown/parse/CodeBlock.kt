@@ -13,13 +13,11 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
+import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
-import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
 
-fun AnnotatedString.Builder.parseCodeBlock(
-    node: ASTNode,
-    content: String,
+internal fun AnnotatedString.Builder.parseCodeBlock(
+    node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
@@ -31,7 +29,7 @@ fun AnnotatedString.Builder.parseCodeBlock(
                 dropFirstEOL = true
                 return@forEach
             }
-            parseMarkdown(child, content, configs, inlineTextContent)
+            parseMarkdown(child, configs, inlineTextContent)
         }
     }
     inlineTextContent[codeBlockKey] = InlineTextContent(
@@ -51,7 +49,5 @@ fun AnnotatedString.Builder.parseCodeBlock(
             )
         }
     }
-
-    val codeBlockContent = node.getTextInNode(content).toString()
-    appendInlineContent(codeBlockKey, codeBlockContent)
+    appendInlineContent(codeBlockKey, node.text)
 }
