@@ -1,13 +1,8 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.withStyle
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
@@ -22,7 +17,17 @@ internal fun AnnotatedString.Builder.parseMarkdown(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    // Napier.d { "${node.type.name} ${node.getTextInNode(content)}" }
+    fun wrapChildren(textStyle: TextStyle, newline: Boolean = false) {
+        withStyle(textStyle.toSpanStyle()) {
+            node.children.forEach { child ->
+                parseMarkdown(child, configs, inlineTextContent)
+            }
+            if (newline) {
+                append('\n')
+            }
+        }
+    }
+
     when (node.type) {
         MarkdownElementTypes.MARKDOWN_FILE,
         MarkdownElementTypes.PARAGRAPH,
@@ -34,42 +39,16 @@ internal fun AnnotatedString.Builder.parseMarkdown(
                 parseMarkdown(child, configs, inlineTextContent)
             }
         }
-        MarkdownElementTypes.SETEXT_1,
-        MarkdownElementTypes.SETEXT_2,
-        MarkdownElementTypes.ATX_1,
-        MarkdownElementTypes.ATX_2,
-        MarkdownElementTypes.ATX_3,
-        MarkdownElementTypes.ATX_4,
-        MarkdownElementTypes.ATX_5,
-        MarkdownElementTypes.ATX_6 -> {
-            parseHeader(node, configs, inlineTextContent)
-        }
-        MarkdownElementTypes.STRONG -> {
-            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                node.children.forEach { child ->
-                    parseMarkdown(child, configs, inlineTextContent)
-                }
-            }
-        }
-        MarkdownElementTypes.EMPH -> {
-            withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
-                node.children.forEach { child ->
-                    parseMarkdown(child, configs, inlineTextContent)
-                }
-            }
-        }
-        MarkdownElementTypes.CODE_SPAN -> {
-            withStyle(
-                SpanStyle(
-                    fontFamily = FontFamily.Monospace,
-                    background = Color.LightGray.copy(alpha = 0.5f),
-                ),
-            ) {
-                node.children.forEach { child ->
-                    parseMarkdown(child, configs, inlineTextContent)
-                }
-            }
-        }
+        MarkdownElementTypes.ATX_1 -> wrapChildren(configs.typography.h1)
+        MarkdownElementTypes.ATX_2 -> wrapChildren(configs.typography.h2)
+        MarkdownElementTypes.ATX_3 -> wrapChildren(configs.typography.h3)
+        MarkdownElementTypes.ATX_4 -> wrapChildren(configs.typography.h4)
+        MarkdownElementTypes.ATX_5 -> wrapChildren(configs.typography.h5)
+        MarkdownElementTypes.ATX_6 -> wrapChildren(configs.typography.h6)
+        MarkdownElementTypes.STRONG -> wrapChildren(configs.typography.strong)
+        MarkdownElementTypes.EMPH -> wrapChildren(configs.typography.em)
+        GFMElementTypes.STRIKETHROUGH -> wrapChildren(configs.typography.del)
+        MarkdownElementTypes.CODE_SPAN -> wrapChildren(configs.typography.codeSpan)
         MarkdownElementTypes.CODE_FENCE,
         MarkdownElementTypes.CODE_BLOCK -> {
             parseCodeBlock(node, configs, inlineTextContent)
@@ -79,13 +58,6 @@ internal fun AnnotatedString.Builder.parseMarkdown(
         }
         MarkdownElementTypes.INLINE_LINK -> {
             parseInlineLink(node, configs, inlineTextContent)
-        }
-        GFMElementTypes.STRIKETHROUGH -> {
-            withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
-                node.children.forEach { child ->
-                    parseMarkdown(child, configs, inlineTextContent)
-                }
-            }
         }
         MarkdownTokenTypes.LIST_BULLET -> {
             parseListBullet(node)
@@ -100,14 +72,12 @@ internal fun AnnotatedString.Builder.parseMarkdown(
             append(node.text)
         }
         MarkdownTokenTypes.CODE_FENCE_START -> {
-            pushStyle(configs.typography.code.toParagraphStyle())
             pushStyle(configs.typography.code.toSpanStyle())
         }
         MarkdownTokenTypes.CODE_FENCE_CONTENT -> {
             append(node.text)
         }
         MarkdownTokenTypes.CODE_FENCE_END -> {
-            pop()
             pop()
         }
         MarkdownTokenTypes.HORIZONTAL_RULE -> {
