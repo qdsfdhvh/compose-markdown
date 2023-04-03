@@ -98,6 +98,9 @@ internal fun AnnotatedString.Builder.parseMarkdown(
                 }
             }
         }
+        GFMTokenTypes.CELL -> {
+            append(node.text.trim())
+        }
         MarkdownTokenTypes.ATX_HEADER -> Unit // #
         MarkdownTokenTypes.SINGLE_QUOTE -> append('\'')
         MarkdownTokenTypes.DOUBLE_QUOTE -> append('\"')
@@ -109,7 +112,7 @@ internal fun AnnotatedString.Builder.parseMarkdown(
         MarkdownTokenTypes.GT -> Unit // >
         MarkdownTokenTypes.COLON -> Unit // :
         MarkdownTokenTypes.BLOCK_QUOTE -> Unit // >
-        MarkdownTokenTypes.EXCLAMATION_MARK -> append('!') // !
+        MarkdownTokenTypes.EXCLAMATION_MARK -> append('!')
         MarkdownTokenTypes.BACKTICK -> Unit // `
         MarkdownTokenTypes.HARD_LINE_BREAK -> append('\n')
         MarkdownTokenTypes.WHITE_SPACE -> append(' ')

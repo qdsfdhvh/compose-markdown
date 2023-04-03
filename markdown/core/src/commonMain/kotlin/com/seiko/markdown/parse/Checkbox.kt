@@ -15,22 +15,24 @@ internal fun AnnotatedString.Builder.parseCheckbox(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    val checkboxKey = node.toString()
-    val nodeText = node.text
-    inlineTextContent[checkboxKey] = InlineTextContent(
-        placeholder = Placeholder(
-            width = configs.checkboxWidthSp,
-            height = configs.checkboxHeightSp,
-            placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
-        ),
-    ) {
-        configs.Content(
-            MarkdownWidget.Checkbox(checked = node.isChecked(nodeText)),
-        )
+    inlineTextContent.getOrPut(CHECKBOX_KEY) {
+        InlineTextContent(
+            placeholder = Placeholder(
+                width = configs.checkboxWidthSp,
+                height = configs.checkboxHeightSp,
+                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+            ),
+        ) { nodeText ->
+            configs.Content(
+                MarkdownWidget.Checkbox(checked = "[x]" in nodeText),
+            )
+        }
     }
-    appendInlineContent(checkboxKey, nodeText)
+    appendInlineContent(CHECKBOX_KEY, node.text)
     append(' ')
 }
+
+private const val CHECKBOX_KEY = "[Checkbox]"
 
 private fun MarkdownNode.isChecked(nodeText: String): Boolean =
     type == GFMTokenTypes.CHECK_BOX && "[x]" in nodeText

@@ -8,13 +8,15 @@ import com.seiko.markdown.model.MarkdownNode
 
 internal fun AnnotatedString.Builder.parseListNumber(node: MarkdownNode) {
     withStyle(SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-        val rawListMarker = node.text.trim()
-        val formattedListMarker = if (!rawListMarker.endsWith(ORDER_SUFFIX)) {
-            "${rawListMarker.dropLast(1)}$ORDER_SUFFIX" // Handle 1) case
+        append("    ")
+        val text = node.text.trim()
+        if (text.endsWith(ORDER_SUFFIX)) {
+            append(text)
         } else {
-            rawListMarker
+            append(text.dropLast(1))
+            append(ORDER_SUFFIX)
         }
-        append("    $formattedListMarker ")
+        append(' ')
     }
 }
 

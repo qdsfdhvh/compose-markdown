@@ -14,7 +14,9 @@ internal fun AnnotatedString.Builder.parseListBullet(node: MarkdownNode) {
     // Only append bullet if this isn't a Checkbox item
     if (!isCheckboxItem) {
         withStyle(SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-            append("    $BULLET_CHAR ")
+            append("    ")
+            append(BULLET_CHAR)
+            append(' ')
         }
     }
 }

@@ -41,7 +41,6 @@ internal fun AnnotatedString.Builder.parseTable(
                             parseMarkdown(it, configs, mutableMapOf())
                         }
                     },
-                    // child.children.filter { it.type == CELL }.map { it.text },
                 )
             }
             GFMTokenTypes.TABLE_SEPARATOR -> {

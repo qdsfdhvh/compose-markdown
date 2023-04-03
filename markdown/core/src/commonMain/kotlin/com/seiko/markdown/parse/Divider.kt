@@ -14,17 +14,20 @@ internal fun AnnotatedString.Builder.parseDivider(
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    val dividerKey = node.toString()
-    inlineTextContent[dividerKey] = InlineTextContent(
-        placeholder = Placeholder(
-            width = configs.maxWidthSP,
-            height = configs.dividerHeightSp,
-            placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
-        ),
-    ) {
-        configs.Content(
-            MarkdownWidget.Divider,
-        )
+    inlineTextContent.getOrPut(DIVIDER_KEY) {
+        InlineTextContent(
+            placeholder = Placeholder(
+                width = configs.maxWidthSP,
+                height = configs.dividerHeightSp,
+                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+            ),
+        ) {
+            configs.Content(
+                MarkdownWidget.Divider,
+            )
+        }
     }
-    appendInlineContent(dividerKey, node.text)
+    appendInlineContent(DIVIDER_KEY, node.text)
 }
+
+private const val DIVIDER_KEY = "[Divider]"

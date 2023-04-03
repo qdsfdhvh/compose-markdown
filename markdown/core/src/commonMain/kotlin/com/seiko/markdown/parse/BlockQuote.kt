@@ -49,5 +49,7 @@ internal fun AnnotatedString.Builder.parseBlockQuote(
             drawText(textLayoutResult, topLeft = Offset(offsetX, 0f))
         }
     }
-    appendInlineContent(blockQuoteKey, node.text)
+    appendInlineContent(BLOCK_QUOTE_KEY, "[BlockQuote]")
 }
+
+private const val BLOCK_QUOTE_KEY = "[BlockQuote]"
