@@ -1,13 +1,8 @@
 package com.seiko.markdown.config
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.AnnotatedString
 
 sealed interface MarkdownWidget {
-    data class Text(
-        val text: AnnotatedString,
-    ) : MarkdownWidget
-
     data class Image(
         val url: String,
     ) : MarkdownWidget
