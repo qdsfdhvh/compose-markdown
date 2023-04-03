@@ -5,7 +5,6 @@ import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.unit.sp
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import com.seiko.markdown.model.MarkdownNode
@@ -20,8 +19,8 @@ internal fun AnnotatedString.Builder.parseCheckbox(
     val nodeText = node.text
     inlineTextContent[checkboxKey] = InlineTextContent(
         placeholder = Placeholder(
-            width = 24.sp,
-            height = 24.sp,
+            width = configs.checkboxWidthSp,
+            height = configs.checkboxHeightSp,
             placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
         ),
     ) {

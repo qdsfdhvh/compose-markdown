@@ -5,6 +5,7 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
@@ -15,14 +16,17 @@ class MarkdownConfigs internal constructor(
     internal val textMeasurer: TextMeasurer,
     private val widgetPlugin: MarkdownWidgetPlugin,
     private val maxWidth: Dp,
-    val dividerHeight: Dp = 1.dp,
+    private val dividerHeight: Dp,
+    private val imageSize: DpSize,
+    private val checkboxSize: DpSize,
 ) : MarkdownWidgetPlugin by widgetPlugin {
 
-    val maxWidthSP: TextUnit
-        get() = maxWidth.toSp()
-
-    val dividerHeightSp: TextUnit
-        get() = dividerHeight.toSp()
+    val maxWidthSP: TextUnit get() = maxWidth.toSp()
+    val dividerHeightSp: TextUnit get() = dividerHeight.toSp()
+    val imageWidthSp: TextUnit get() = imageSize.width.toSp()
+    val imageHeightSp: TextUnit get() = imageSize.height.toSp()
+    val checkboxWidthSp: TextUnit get() = checkboxSize.width.toSp()
+    val checkboxHeightSp: TextUnit get() = checkboxSize.height.toSp()
 
     fun calcTextWidth(text: AnnotatedString): TextUnit {
         return textMeasurer.measure(text).size.width.toSp()
@@ -47,8 +51,10 @@ class MarkdownConfigsBuilder internal constructor(
     private val density: Density,
     private val textMeasurer: TextMeasurer,
 ) {
-    var dividerHeight: Dp = 1.dp
     var maxWidth: Dp = 800.dp
+    var dividerHeight: Dp = 1.dp
+    var imageSize: DpSize = DpSize(64.dp, 64.dp)
+    var checkboxSize: DpSize = DpSize(24.dp, 24.dp)
 
     private val widgetPluginProxy = MarkdownWidgetPluginProxy()
 
@@ -63,6 +69,8 @@ class MarkdownConfigsBuilder internal constructor(
         widgetPlugin = widgetPluginProxy,
         maxWidth = maxWidth,
         dividerHeight = dividerHeight,
+        imageSize = imageSize,
+        checkboxSize = checkboxSize,
     )
 }
 

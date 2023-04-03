@@ -23,8 +23,8 @@ internal fun AnnotatedString.Builder.parseImage(
             ?.text ?: return
         inlineTextContent[imageUrl] = InlineTextContent(
             placeholder = Placeholder(
-                width = 64.sp,
-                height = 64.sp,
+                width = configs.imageWidthSp,
+                height = configs.imageHeightSp,
                 PlaceholderVerticalAlign.TextCenter,
             ),
         ) {
