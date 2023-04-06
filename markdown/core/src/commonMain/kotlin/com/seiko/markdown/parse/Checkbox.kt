@@ -1,7 +1,6 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import com.seiko.markdown.MarkdownContentBuilder

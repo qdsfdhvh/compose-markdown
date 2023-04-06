@@ -9,14 +9,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Density
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownConfigsBuilder
 import com.seiko.markdown.config.MarkdownTypography
 import com.seiko.markdown.model.MarkdownNode
-import com.seiko.markdown.parse.parseMarkdown
 import org.intellij.markdown.flavours.MarkdownFlavourDescriptor
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
@@ -62,16 +60,9 @@ fun parseMarkdownTextContent(
 ): MarkdownTextContent {
     val rootNode = MarkdownParser(flavour).buildMarkdownTreeFromString(content)
     val rootMarkdownNode = MarkdownNode(rootNode, null, content)
-
-    val inlineTextContent = mutableMapOf<String, InlineTextContent>()
-    val annotatedString = buildAnnotatedString {
-        parseMarkdown(rootMarkdownNode, configs, inlineTextContent)
+    return buildMarkdownContent(configs) {
+        append(rootMarkdownNode)
     }
-
-    return MarkdownTextContent(
-        annotatedString = annotatedString,
-        inlineTextContent = inlineTextContent,
-    )
 }
 
 data class MarkdownTextContent(

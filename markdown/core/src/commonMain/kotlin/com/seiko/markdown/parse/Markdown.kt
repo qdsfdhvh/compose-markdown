@@ -1,8 +1,6 @@
 package com.seiko.markdown.parse
 
-import androidx.compose.foundation.text.InlineTextContent
 import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 import io.github.aakira.napier.Napier
 import org.intellij.markdown.MarkdownElementTypes
@@ -10,11 +8,7 @@ import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-internal fun MarkdownContentBuilder.parseMarkdown(
-    node: MarkdownNode,
-    configs: MarkdownConfigs,
-    inlineTextContent: MutableMap<String, InlineTextContent>,
-) {
+internal fun MarkdownContentBuilder.appendInternal(node: MarkdownNode) {
     when (node.type) {
         MarkdownTokenTypes.ATX_CONTENT,
         MarkdownElementTypes.MARKDOWN_FILE,
@@ -32,32 +26,32 @@ internal fun MarkdownContentBuilder.parseMarkdown(
         MarkdownElementTypes.STRONG,
         MarkdownElementTypes.CODE_SPAN,
         GFMElementTypes.STRIKETHROUGH -> {
-            visitChildren(node, configs, inlineTextContent)
+            visitChildren(node)
         }
         MarkdownElementTypes.CODE_FENCE,
         MarkdownElementTypes.CODE_BLOCK -> {
-            parseCodeBlock(node, configs, inlineTextContent)
+            appendCodeBlock(node)
         }
         MarkdownElementTypes.IMAGE -> {
-            parseImage(node, configs, inlineTextContent)
+            parseImage(node)
         }
         MarkdownElementTypes.INLINE_LINK -> {
-            parseInlineLink(node, configs, inlineTextContent)
+            parseInlineLink(node)
         }
         MarkdownTokenTypes.LIST_BULLET -> {
             parseListBullet(node)
         }
         MarkdownTokenTypes.LIST_NUMBER -> {
-            parseListNumber(node)
+            appendListNumber(node)
         }
         MarkdownElementTypes.BLOCK_QUOTE -> {
-            parseBlockQuote(node, configs, inlineTextContent)
+            parseBlockQuote(node)
         }
         MarkdownTokenTypes.TEXT -> {
             append(node.text)
         }
         MarkdownTokenTypes.CODE_FENCE_START -> {
-            pushStyle(configs.typography.code.toSpanStyle())
+            pushStyle(configs.typography.code)
         }
         MarkdownTokenTypes.CODE_FENCE_CONTENT -> {
             append(node.text)
@@ -66,7 +60,7 @@ internal fun MarkdownContentBuilder.parseMarkdown(
             pop()
         }
         MarkdownTokenTypes.HORIZONTAL_RULE -> {
-            parseDivider(node, configs, inlineTextContent)
+            appendDivider(node)
         }
         MarkdownTokenTypes.EOL -> {
             when (val parentType = node.parent?.type) {

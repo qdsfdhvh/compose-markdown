@@ -3,38 +3,34 @@ package com.seiko.markdown.parse
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.buildMarkdownContent
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 
 @OptIn(ExperimentalTextApi::class)
-internal fun MarkdownContentBuilder.parseCodeBlock(
+internal fun MarkdownContentBuilder.appendCodeBlock(
     node: MarkdownNode,
-    configs: MarkdownConfigs,
-    inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
     val codeBlockKey = node.toString()
-    val codeBlockAnnotatedString = buildAnnotatedString {
+    val codeBlockAnnotatedString = buildMarkdownContent(configs) {
         var dropFirstEOL = false
         node.children.forEach { child ->
             if (!dropFirstEOL && child.type === EOL) {
                 dropFirstEOL = true
                 return@forEach
             }
-            parseMarkdown(child, configs, inlineTextContent)
+            append(child)
         }
     }
 
-    val textLayoutResult = configs.textMeasurer.measure(codeBlockAnnotatedString)
+    val textLayoutResult = configs.textMeasurer.measure(codeBlockAnnotatedString.annotatedString)
 
     inlineTextContent[codeBlockKey] = InlineTextContent(
         placeholder = Placeholder(

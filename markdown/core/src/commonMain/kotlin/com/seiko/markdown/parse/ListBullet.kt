@@ -1,8 +1,5 @@
 package com.seiko.markdown.parse
 
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
@@ -13,7 +10,7 @@ internal fun MarkdownContentBuilder.parseListBullet(node: MarkdownNode) {
         ?: false
     // Only append bullet if this isn't a Checkbox item
     if (!isCheckboxItem) {
-        withStyle(SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+        withStyle(configs.typography.listBullet) {
             append("    ")
             append(BULLET_CHAR)
             append(' ')

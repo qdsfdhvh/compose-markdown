@@ -3,7 +3,7 @@ package com.seiko.markdown.model
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.ast.ASTNode
 
-internal class MarkdownNode(
+class MarkdownNode internal constructor(
     val node: ASTNode,
     val parent: MarkdownNode?,
     val content: String,

@@ -33,4 +33,10 @@ data class MarkdownTypography(
         fontFamily = FontFamily.Monospace,
         background = Color.LightGray.copy(alpha = 0.5f),
     ),
+    val listNumber: TextStyle = TextStyle(
+        fontWeight = FontWeight.ExtraBold,
+    ),
+    val listBullet: TextStyle = TextStyle(
+        fontWeight = FontWeight.ExtraBold,
+    ),
 )

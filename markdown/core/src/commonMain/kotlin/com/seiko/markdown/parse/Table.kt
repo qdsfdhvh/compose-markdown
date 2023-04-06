@@ -13,7 +13,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
 import com.seiko.markdown.MarkdownContentBuilder
@@ -38,9 +37,7 @@ internal fun MarkdownContentBuilder.parseTable(
             GFMElementTypes.HEADER -> {
                 headers.addAll(
                     child.children.filter { it.type == CELL }.map {
-                        buildAnnotatedString {
-                            parseMarkdown(it, configs, mutableMapOf())
-                        }
+                        AnnotatedString(it.text)
                     },
                 )
             }
@@ -49,9 +46,7 @@ internal fun MarkdownContentBuilder.parseTable(
             GFMElementTypes.ROW -> {
                 rows.add(
                     child.children.filter { it.type == CELL }.map {
-                        buildAnnotatedString {
-                            parseMarkdown(it, configs, mutableMapOf())
-                        }
+                        AnnotatedString(it.text)
                     },
                 )
             }
@@ -59,7 +54,9 @@ internal fun MarkdownContentBuilder.parseTable(
     }
 
     val cellHeight = 40.dp
-    val tableHeight = with(configs.density) { cellHeight.toSp() } * (1 + rows.size) // TODO calc row height
+    val tableHeight = with(configs.density) {
+        cellHeight.toSp()
+    } * (1 + rows.size) // TODO calc row height
 
     val borderColor = Color.Black
     val cellSpacing = 2.dp
