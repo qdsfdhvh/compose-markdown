@@ -1,13 +1,13 @@
 package com.seiko.markdown.parse
 
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-internal fun AnnotatedString.Builder.parseListBullet(node: MarkdownNode) {
+internal fun MarkdownContentBuilder.parseListBullet(node: MarkdownNode) {
     val isCheckboxItem = node.parent?.children
         ?.any { it.type == GFMTokenTypes.CHECK_BOX }
         ?: false

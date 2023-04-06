@@ -1,17 +1,17 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.UrlAnnotation
 import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownElementTypes
 
 @OptIn(ExperimentalTextApi::class)
-internal fun AnnotatedString.Builder.parseInlineLink(
+internal fun MarkdownContentBuilder.parseInlineLink(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,

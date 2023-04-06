@@ -16,6 +16,7 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
@@ -23,7 +24,7 @@ import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes.CELL
 
 @OptIn(ExperimentalTextApi::class)
-internal fun AnnotatedString.Builder.parseTable(
+internal fun MarkdownContentBuilder.parseTable(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,

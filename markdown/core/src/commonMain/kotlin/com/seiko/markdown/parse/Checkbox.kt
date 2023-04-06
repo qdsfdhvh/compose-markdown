@@ -2,15 +2,14 @@ package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.config.MarkdownWidget
 import com.seiko.markdown.model.MarkdownNode
-import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-internal fun AnnotatedString.Builder.parseCheckbox(
+internal fun MarkdownContentBuilder.parseCheckbox(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
@@ -24,7 +23,7 @@ internal fun AnnotatedString.Builder.parseCheckbox(
             ),
         ) { nodeText ->
             configs.Content(
-                MarkdownWidget.Checkbox(checked = "[x]" in nodeText),
+                MarkdownWidget.Checkbox(checked = nodeText.isChecked),
             )
         }
     }
@@ -34,5 +33,5 @@ internal fun AnnotatedString.Builder.parseCheckbox(
 
 private const val CHECKBOX_KEY = "[Checkbox]"
 
-private fun MarkdownNode.isChecked(nodeText: String): Boolean =
-    type == GFMTokenTypes.CHECK_BOX && "[x]" in nodeText
+private val String.isChecked: Boolean
+    get() = "[x]" in this

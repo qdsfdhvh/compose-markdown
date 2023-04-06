@@ -16,11 +16,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 
 @OptIn(ExperimentalTextApi::class)
-internal fun AnnotatedString.Builder.parseBlockQuote(
+internal fun MarkdownContentBuilder.parseBlockQuote(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,

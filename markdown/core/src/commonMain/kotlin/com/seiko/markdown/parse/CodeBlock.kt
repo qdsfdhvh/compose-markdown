@@ -6,18 +6,18 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 
 @OptIn(ExperimentalTextApi::class)
-internal fun AnnotatedString.Builder.parseCodeBlock(
+internal fun MarkdownContentBuilder.parseCodeBlock(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,

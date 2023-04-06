@@ -1,9 +1,7 @@
 package com.seiko.markdown.parse
 
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.withStyle
+import com.seiko.markdown.MarkdownContentBuilder
 import com.seiko.markdown.config.MarkdownConfigs
 import com.seiko.markdown.model.MarkdownNode
 import io.github.aakira.napier.Napier
@@ -12,43 +10,30 @@ import org.intellij.markdown.MarkdownTokenTypes
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
-internal fun AnnotatedString.Builder.parseMarkdown(
+internal fun MarkdownContentBuilder.parseMarkdown(
     node: MarkdownNode,
     configs: MarkdownConfigs,
     inlineTextContent: MutableMap<String, InlineTextContent>,
 ) {
-    fun wrapChildren(textStyle: TextStyle, newline: Boolean = false) {
-        withStyle(textStyle.toSpanStyle()) {
-            node.children.forEach { child ->
-                parseMarkdown(child, configs, inlineTextContent)
-            }
-            if (newline) {
-                append('\n')
-            }
-        }
-    }
-
     when (node.type) {
+        MarkdownTokenTypes.ATX_CONTENT,
         MarkdownElementTypes.MARKDOWN_FILE,
-        MarkdownElementTypes.PARAGRAPH,
         MarkdownElementTypes.UNORDERED_LIST,
         MarkdownElementTypes.ORDERED_LIST,
         MarkdownElementTypes.LIST_ITEM,
-        MarkdownTokenTypes.ATX_CONTENT -> {
-            node.children.forEach { child ->
-                parseMarkdown(child, configs, inlineTextContent)
-            }
+        MarkdownElementTypes.PARAGRAPH,
+        MarkdownElementTypes.ATX_1,
+        MarkdownElementTypes.ATX_2,
+        MarkdownElementTypes.ATX_3,
+        MarkdownElementTypes.ATX_4,
+        MarkdownElementTypes.ATX_5,
+        MarkdownElementTypes.ATX_6,
+        MarkdownElementTypes.EMPH,
+        MarkdownElementTypes.STRONG,
+        MarkdownElementTypes.CODE_SPAN,
+        GFMElementTypes.STRIKETHROUGH -> {
+            visitChildren(node, configs, inlineTextContent)
         }
-        MarkdownElementTypes.ATX_1 -> wrapChildren(configs.typography.h1)
-        MarkdownElementTypes.ATX_2 -> wrapChildren(configs.typography.h2)
-        MarkdownElementTypes.ATX_3 -> wrapChildren(configs.typography.h3)
-        MarkdownElementTypes.ATX_4 -> wrapChildren(configs.typography.h4)
-        MarkdownElementTypes.ATX_5 -> wrapChildren(configs.typography.h5)
-        MarkdownElementTypes.ATX_6 -> wrapChildren(configs.typography.h6)
-        MarkdownElementTypes.STRONG -> wrapChildren(configs.typography.strong)
-        MarkdownElementTypes.EMPH -> wrapChildren(configs.typography.em)
-        GFMElementTypes.STRIKETHROUGH -> wrapChildren(configs.typography.del)
-        MarkdownElementTypes.CODE_SPAN -> wrapChildren(configs.typography.codeSpan)
         MarkdownElementTypes.CODE_FENCE,
         MarkdownElementTypes.CODE_BLOCK -> {
             parseCodeBlock(node, configs, inlineTextContent)
