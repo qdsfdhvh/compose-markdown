@@ -27,7 +27,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(compose.foundation)
                 api(compose.ui)
                 api(libs.markdown)
                 api(libs.napier)

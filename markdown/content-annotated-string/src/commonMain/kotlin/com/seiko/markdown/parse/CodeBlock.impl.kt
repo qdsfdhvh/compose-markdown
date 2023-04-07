@@ -9,17 +9,17 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.drawText
-import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.buildMarkdownContent
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
+import com.seiko.markdown.MarkdownTextContentBuilder
+import com.seiko.markdown.buildMarkdownTextContent
 import org.intellij.markdown.MarkdownTokenTypes.Companion.EOL
 
 @OptIn(ExperimentalTextApi::class)
-internal fun MarkdownContentBuilder.appendCodeBlock(
+internal fun MarkdownTextContentBuilder.appendCodeBlockInternal(
     node: MarkdownNode,
 ) {
     val codeBlockKey = node.toString()
-    val codeBlockAnnotatedString = buildMarkdownContent(configs) {
+    val codeBlockAnnotatedString = buildMarkdownTextContent(configs) {
         var dropFirstEOL = false
         node.children.forEach { child ->
             if (!dropFirstEOL && child.type === EOL) {

@@ -3,16 +3,11 @@ package com.seiko.markdown.parse
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
-import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.config.MarkdownConfigs
+import com.seiko.markdown.MarkdownNode
+import com.seiko.markdown.MarkdownTextContentBuilder
 import com.seiko.markdown.config.MarkdownWidget
-import com.seiko.markdown.model.MarkdownNode
 
-internal fun MarkdownContentBuilder.parseCheckbox(
-    node: MarkdownNode,
-    configs: MarkdownConfigs,
-    inlineTextContent: MutableMap<String, InlineTextContent>,
-) {
+internal fun MarkdownTextContentBuilder.appendCheckboxInternal(node: MarkdownNode) {
     inlineTextContent.getOrPut(CHECKBOX_KEY) {
         InlineTextContent(
             placeholder = Placeholder(

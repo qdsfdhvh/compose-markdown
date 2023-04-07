@@ -1,7 +1,7 @@
 package com.seiko.markdown.parse
 
 import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
 import io.github.aakira.napier.Napier
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.MarkdownTokenTypes
@@ -32,9 +32,7 @@ internal fun MarkdownContentBuilder.appendInternal(node: MarkdownNode) {
         MarkdownElementTypes.CODE_BLOCK -> {
             appendCodeBlock(node)
         }
-        MarkdownElementTypes.IMAGE -> {
-            parseImage(node)
-        }
+        MarkdownElementTypes.IMAGE -> appendImage(node)
         MarkdownElementTypes.INLINE_LINK -> {
             parseInlineLink(node)
         }
@@ -45,7 +43,7 @@ internal fun MarkdownContentBuilder.appendInternal(node: MarkdownNode) {
             appendListNumber(node)
         }
         MarkdownElementTypes.BLOCK_QUOTE -> {
-            parseBlockQuote(node)
+            appendBlockQuote(node)
         }
         MarkdownTokenTypes.TEXT -> {
             append(node.text)
@@ -97,12 +95,8 @@ internal fun MarkdownContentBuilder.appendInternal(node: MarkdownNode) {
         MarkdownTokenTypes.WHITE_SPACE -> append(' ')
         MarkdownTokenTypes.EMPH -> Unit // *
         GFMTokenTypes.TILDE -> Unit // ~
-        GFMTokenTypes.CHECK_BOX -> {
-            parseCheckbox(node, configs, inlineTextContent)
-        }
-        GFMElementTypes.TABLE -> {
-            parseTable(node, configs, inlineTextContent)
-        }
+        GFMTokenTypes.CHECK_BOX -> appendCheckbox(node)
+        GFMElementTypes.TABLE -> appendTable(node)
         else -> {
             Napier.d { "??? ${node.type.name} ${node.text}" }
             append(node.text)

@@ -13,13 +13,11 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
-import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
+import com.seiko.markdown.MarkdownTextContentBuilder
 
 @OptIn(ExperimentalTextApi::class)
-internal fun MarkdownContentBuilder.parseBlockQuote(
-    node: MarkdownNode,
-) {
+internal fun MarkdownTextContentBuilder.appendBlockQuoteInternal(node: MarkdownNode) {
     val blockQuoteKey = node.toString()
     val blockQuoteAnnotatedString = buildAnnotatedString {
         node.children.forEach { child ->

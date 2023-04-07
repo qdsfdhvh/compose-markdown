@@ -12,12 +12,18 @@ sealed interface MarkdownWidget {
     ) : MarkdownWidget
 
     object Divider : MarkdownWidget
+
+    data class Text(
+        val text: String,
+    ) : MarkdownWidget
 }
 
 interface MarkdownWidgetPlugin {
 
+    fun isSupport(enum: MarkdownWidget): Boolean
+
     @Composable
-    fun Content(enum: MarkdownWidget): Boolean
+    fun Content(enum: MarkdownWidget)
 }
 
 internal class MarkdownWidgetPluginProxy : MarkdownWidgetPlugin {
@@ -28,11 +34,12 @@ internal class MarkdownWidgetPluginProxy : MarkdownWidgetPlugin {
         plugins.add(plugin)
     }
 
+    override fun isSupport(enum: MarkdownWidget): Boolean {
+        return plugins.any { it.isSupport(enum) }
+    }
+
     @Composable
-    override fun Content(enum: MarkdownWidget): Boolean {
-        plugins.forEach { plugin ->
-            if (plugin.Content(enum)) return true
-        }
-        return false
+    override fun Content(enum: MarkdownWidget) {
+        plugins.find { it.isSupport(enum) }?.Content(enum)
     }
 }

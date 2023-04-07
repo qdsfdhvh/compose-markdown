@@ -1,8 +1,8 @@
 package com.seiko.markdown.parse
 
 import com.seiko.markdown.MarkdownContentBuilder
+import com.seiko.markdown.MarkdownNode
 import com.seiko.markdown.config.MarkdownConfigs
-import com.seiko.markdown.model.MarkdownNode
 import org.intellij.markdown.MarkdownElementTypes
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 

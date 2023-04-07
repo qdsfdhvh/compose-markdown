@@ -1,7 +1,7 @@
 package com.seiko.markdown.parse
 
 import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
 import org.intellij.markdown.MarkdownElementTypes
 
 internal fun MarkdownContentBuilder.parseInlineLink(node: MarkdownNode) {

@@ -3,7 +3,6 @@ package com.seiko.markdown.parse
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -15,19 +14,14 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.dp
-import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.config.MarkdownConfigs
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
+import com.seiko.markdown.MarkdownTextContentBuilder
 import org.intellij.markdown.flavours.gfm.GFMElementTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 import org.intellij.markdown.flavours.gfm.GFMTokenTypes.CELL
 
 @OptIn(ExperimentalTextApi::class)
-internal fun MarkdownContentBuilder.parseTable(
-    node: MarkdownNode,
-    configs: MarkdownConfigs,
-    inlineTextContent: MutableMap<String, InlineTextContent>,
-) {
+internal fun MarkdownTextContentBuilder.appendTableInternal(node: MarkdownNode) {
     val tableContentKey = node.toString()
 
     val headers = mutableListOf<AnnotatedString>()

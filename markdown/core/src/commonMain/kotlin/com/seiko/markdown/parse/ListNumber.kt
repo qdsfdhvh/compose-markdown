@@ -1,7 +1,7 @@
 package com.seiko.markdown.parse
 
 import com.seiko.markdown.MarkdownContentBuilder
-import com.seiko.markdown.model.MarkdownNode
+import com.seiko.markdown.MarkdownNode
 
 internal fun MarkdownContentBuilder.appendListNumber(node: MarkdownNode) {
     withStyle(configs.typography.listNumber) {

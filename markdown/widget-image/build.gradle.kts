@@ -27,7 +27,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                // api(compose.material)
+                api(compose.foundation)
                 api(projects.markdown.core)
                 api(libs.imageloader)
             }

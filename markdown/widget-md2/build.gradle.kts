@@ -28,7 +28,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(compose.material)
-                api(projects.markdown.core)
+                api(projects.markdown.contentAnnotatedString)
             }
         }
     }

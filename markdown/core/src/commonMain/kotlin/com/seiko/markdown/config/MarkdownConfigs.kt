@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalTextApi::class)
 class MarkdownConfigs internal constructor(
     val typography: MarkdownTypography,
-    internal val density: Density,
-    internal val textMeasurer: TextMeasurer,
+    val density: Density,
+    val textMeasurer: TextMeasurer,
     private val widgetPlugin: MarkdownWidgetPlugin,
     private val maxWidth: Dp,
     private val dividerHeight: Dp,

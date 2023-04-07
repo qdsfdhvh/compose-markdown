@@ -25,6 +25,8 @@ kotlin {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.ui)
+                api(projects.markdown.core)
+                api(projects.markdown.contentAnnotatedString)
                 api(projects.markdown.widgetImage)
                 api(projects.markdown.widgetMd2)
                 api(projects.markdown.widgetMd3)
